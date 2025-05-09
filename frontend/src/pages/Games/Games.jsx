@@ -117,6 +117,11 @@ const Games = () => {
                   <Typography variant="body2">
                     ESRB: {game.esrb_rating?.trim() || "Not Rated"}
                   </Typography>
+                  {game.vgb_score && (
+  <Typography variant="body2">
+    VGB Score: ⭐ {game.vgb_score}/10
+  </Typography>
+)}
 
                   {game.platforms && (
                     <Box sx={{ display: "flex", gap: 1, mt: 1, flexWrap: "wrap" }}>

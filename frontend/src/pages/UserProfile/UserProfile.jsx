@@ -10,7 +10,8 @@ import {
   Avatar,
   Divider,
   Grid,
-  Button
+  Button,
+  TextField
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAuth } from "../../store/authContext";
@@ -28,9 +29,16 @@ const UserProfile = () => {
   const [reviews, setReviews] = useState([]);
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [tempAvatar, setTempAvatar] = useState(authUser?.avatar_url || avatarOptions[0]);
+  const [bio, setBio] = useState(authUser?.bio || "");
+  const [createdAt, setCreatedAt] = useState("");
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [tempBio, setTempBio] = useState(bio);
 
   useEffect(() => {
-    if (token) fetchUserReviews();
+    if (token) {
+      fetchUserReviews();
+      fetchUserProfile();
+    }
   }, [token]);
 
   useEffect(() => {
@@ -50,6 +58,19 @@ const UserProfile = () => {
     }
   };
 
+  const fetchUserProfile = async () => {
+    try {
+      const res = await axios.get("http://localhost:3003/api/profile/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBio(res.data.bio);
+      setTempBio(res.data.bio || "");
+      setCreatedAt(new Date(res.data.created_at).toLocaleDateString());
+    } catch (err) {
+      console.error("Failed to fetch profile info");
+    }
+  };
+
   const handleDelete = async (reviewId) => {
     try {
       await axios.delete(`http://localhost:3003/api/review/delete/${reviewId}`, {
@@ -63,27 +84,38 @@ const UserProfile = () => {
   };
 
   const handleAvatarSave = async () => {
-  try {
-    const res = await axios.put(
-      "http://localhost:3003/api/profile/avatar",
-      { avatar_url: tempAvatar },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      await axios.put(
+        "http://localhost:3003/api/profile/avatar",
+        { avatar_url: tempAvatar },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    console.log("Avatar updated response:", res.data); // ✅ Add this
+      const updatedUser = { ...authUser, avatar_url: tempAvatar };
+      localStorage.setItem("authUser", JSON.stringify(updatedUser));
+      setAuthUser(updatedUser);
 
-    const updatedUser = { ...authUser, avatar_url: tempAvatar };
-    localStorage.setItem("authUser", JSON.stringify(updatedUser));
-    setAuthUser(updatedUser);
+      toast.success("Avatar updated");
+      setIsEditingAvatar(false);
+    } catch (err) {
+      toast.error("Failed to update avatar");
+    }
+  };
 
-    toast.success("Avatar updated");
-    setIsEditingAvatar(false);
-  } catch (err) {
-    console.error("Avatar update failed:", err.response?.data || err.message); // ✅ More detail
-    toast.error("Failed to update avatar");
-  }
-};
-
+  const handleBioSave = async () => {
+    try {
+      await axios.put(
+        "http://localhost:3003/api/profile/bio",
+        { bio: tempBio },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setBio(tempBio);
+      toast.success("Bio updated");
+      setIsEditingBio(false);
+    } catch (err) {
+      toast.error("Failed to update bio");
+    }
+  };
 
   return (
     <Box sx={{ padding: 4 }}>
@@ -98,11 +130,46 @@ const UserProfile = () => {
           borderRadius: 2,
         }}
       >
-<Avatar src={authUser?.avatar_url} sx={{ width: 72, height: 72 }} />
+        <Avatar src={authUser?.avatar_url} sx={{ width: 72, height: 72 }} />
         <Box>
           <Typography variant="h5">{authUser?.username}</Typography>
           <Typography variant="body2" color="textSecondary">
             {authUser?.email}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Joined: {createdAt || "Loading..."}
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            <strong>Bio:</strong>
+            {isEditingBio ? (
+              <>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  value={tempBio}
+                  onChange={(e) => setTempBio(e.target.value)}
+                  sx={{ mt: 1 }}
+                />
+                <Button onClick={handleBioSave} sx={{ mt: 1 }} variant="outlined">
+                  Save Bio
+                </Button>
+              </>
+            ) : (
+              <> {bio || "No bio set."}</>
+            )}
+          </Typography>
+          {!isEditingBio && (
+            <Button
+              size="small"
+              sx={{ mt: 1 }}
+              onClick={() => setIsEditingBio(true)}
+            >
+              Edit Bio
+            </Button>
+          )}
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            <strong>Total Reviews:</strong> {reviews.length}
           </Typography>
         </Box>
         <Button onClick={() => setIsEditingAvatar(!isEditingAvatar)} sx={{ ml: "auto" }}>
