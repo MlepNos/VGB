@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAppContext } from "../../hooks/useAppContext";
+const API = process.env.REACT_APP_API_URL;
 
 const Discover = () => {
   const [search, setSearch] = useState("");
@@ -20,7 +21,7 @@ const Discover = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/api/game/external", {
+      const response = await axios.get(`${API}/game/external`, {
         params: { search },
       });
       setResults(response.data.results); // RAWG returns { results: [...] }
@@ -31,7 +32,7 @@ const Discover = () => {
 
   const handleSave = async (game) => {
     try {
-      const res = await axios.post("http://localhost:3003/api/game", game);
+      const res = await axios.post(`${API}/game`, game);
       toast.success(`🎮 ${game.name} saved to your library!`);
       addGame({
   ...game,

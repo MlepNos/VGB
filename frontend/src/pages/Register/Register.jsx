@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { toast } from "react-toastify";
+const API = process.env.REACT_APP_API_URL;
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -13,7 +14,7 @@ const Register = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:3003/api/auth/register", { username, email, password });
+      await axios.post(`${API}/auth/register`, { username, email, password });
       toast.success("Registered successfully");
       navigate("/login");
     } catch (err) {

@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 // ... your existing imports
 import { useAuth } from "../../store/authContext";
+const API = process.env.REACT_APP_API_URL;
 
 const GameDetail = () => {
   const { id } = useParams();
@@ -45,7 +46,7 @@ const COLORS = [
 
   const fetchGame = async () => {
     try {
-      const res = await axios.get(`http://localhost:3003/api/game/${id}`);
+      const res = await axios.get(`${API}/game/${id}`);
       setGame(res.data);
       setVgbScore(res.data.vgb_score || "");
     } catch (err) {
@@ -55,7 +56,7 @@ const COLORS = [
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`http://localhost:3003/api/review/${id}`);
+      const res = await axios.get(`${API}/review/${id}`);
       setReviews(res.data);
       const scores = res.data.map((r) => r.score);
       if (scores.length) {
@@ -78,7 +79,7 @@ const COLORS = [
 
   const handleReviewSubmit = async () => {
     try {
-      await axios.post(`http://localhost:3003/api/review/${id}`, {
+      await axios.post(`${API}/review/${id}`, {
         comment,
         score,
       }, {
@@ -95,7 +96,7 @@ const COLORS = [
 
   const handleDeleteReview = async (reviewId) => {
     try {
-      await axios.delete(`http://localhost:3003/api/review/delete/${reviewId}`, {
+      await axios.delete(`${API}/review/delete/${reviewId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Review deleted");
@@ -107,7 +108,7 @@ const COLORS = [
 
   const handleVgbScoreSubmit = async () => {
     try {
-      await axios.post(`http://localhost:3003/api/review/vgb-score/${id}`, {
+      await axios.post(`${API}/review/vgb-score/${id}`, {
         score: parseFloat(vgbScore),
       }, {
         headers: { Authorization: `Bearer ${token}` }

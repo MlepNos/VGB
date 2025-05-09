@@ -16,7 +16,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAuth } from "../../store/authContext";
 import { toast } from "react-toastify";
-
+const API = process.env.REACT_APP_API_URL;
 const avatarOptions = [
   "/avatars/avatar1.png",
   "/avatars/avatar2.png",
@@ -49,7 +49,7 @@ const UserProfile = () => {
 
   const fetchUserReviews = async () => {
     try {
-      const res = await axios.get("http://localhost:3003/api/review/user/me", {
+      const res = await axios.get(`${API}/review/user/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(res.data);
@@ -60,7 +60,7 @@ const UserProfile = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.get("http://localhost:3003/api/profile/me", {
+      const res = await axios.get(`${API}/profile/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBio(res.data.bio);
@@ -73,7 +73,7 @@ const UserProfile = () => {
 
   const handleDelete = async (reviewId) => {
     try {
-      await axios.delete(`http://localhost:3003/api/review/delete/${reviewId}`, {
+      await axios.delete(`${API}/review/delete/${reviewId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Review deleted");
@@ -86,7 +86,7 @@ const UserProfile = () => {
   const handleAvatarSave = async () => {
     try {
       await axios.put(
-        "http://localhost:3003/api/profile/avatar",
+        `${API}/profile/avatar`,
         { avatar_url: tempAvatar },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -105,7 +105,7 @@ const UserProfile = () => {
   const handleBioSave = async () => {
     try {
       await axios.put(
-        "http://localhost:3003/api/profile/bio",
+        `${API}/profile/bio`,
         { bio: tempBio },
         { headers: { Authorization: `Bearer ${token}` } }
       );

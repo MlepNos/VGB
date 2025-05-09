@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { useAuth } from "../../store/authContext";
 import { toast } from "react-toastify";
+const API = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post("http://localhost:3003/api/auth/login", { email, password });
+      const res = await axios.post(`${API}/auth/login`, { email, password });
       login(res.data.user, res.data.token);
       toast.success("Logged in successfully");
       navigate("/");

@@ -18,6 +18,7 @@ import ComputerIcon from "@mui/icons-material/Computer";
 import AppleIcon from "@mui/icons-material/Apple";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import SportsScoreIcon from "@mui/icons-material/SportsScore";
+const API = process.env.REACT_APP_API_URL;
 
 const platformIcons = {
   PC: <ComputerIcon fontSize="small" />,
@@ -36,7 +37,7 @@ const Games = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3003/api/game/${id}`);
+      await axios.delete(`${API}/game/${id}`);
       toast.success("Game removed.");
       fetchGames();
     } catch (err) {
