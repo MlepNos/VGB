@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/VGB/static/css/main.895d7998.css",
-    "main.js": "/VGB/static/js/main.ebeb4d45.js",
+    "main.js": "/VGB/static/js/main.f039f118.js",
     "index.html": "/VGB/index.html",
     "main.895d7998.css.map": "/VGB/static/css/main.895d7998.css.map",
-    "main.ebeb4d45.js.map": "/VGB/static/js/main.ebeb4d45.js.map"
+    "main.f039f118.js.map": "/VGB/static/js/main.f039f118.js.map"
   },
   "entrypoints": [
     "static/css/main.895d7998.css",
-    "static/js/main.ebeb4d45.js"
+    "static/js/main.f039f118.js"
   ]
 }
