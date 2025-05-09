@@ -4,7 +4,7 @@ const cors = require("cors");
 const gameRoutes = require("./routes/games");
 const reviewRoutes = require("./routes/reviews.js")
 const authRoutes = require("./routes/auth");
-
+const authProfile = require("./routes/profile");
 const { connectToDatabase } = require("./controller/connect.js");
 require("dotenv").config();
 
@@ -24,6 +24,7 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/game", gameRoutes);
 app.use("/api/review", reviewRoutes);
+app.use("/api/profile", authProfile);
 
 connectToDatabase()
   .then(() => {

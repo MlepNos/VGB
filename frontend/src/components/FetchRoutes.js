@@ -7,6 +7,8 @@ import GameDetail from "../pages/GameDetail/GameDetail";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register"; // if you created it
+import UserProfile from "../pages/UserProfile/UserProfile";
+
 function FetchRoutes() {
   return (
     <div>
@@ -18,6 +20,8 @@ function FetchRoutes() {
         <Route path="/games" element={<ProtectedRoute><Games /></ProtectedRoute>} />
         <Route path="/discover" element={<ProtectedRoute><Discover /></ProtectedRoute>} />
         <Route path="/games/:id" element={<ProtectedRoute><GameDetail /></ProtectedRoute>} />
+        <Route path="/profile" element={<UserProfile />} />
+
       </Routes>
     </div>
   );

@@ -31,6 +31,9 @@ const Header = () => {
 
         {authUser ? (
           <>
+            <Button color="inherit" component={Link} to="/profile">
+              Profile
+            </Button>
             <Typography variant="body2" sx={{ mx: 2 }}>
               {authUser.username}
             </Typography>
